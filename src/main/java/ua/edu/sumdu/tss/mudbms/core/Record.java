@@ -1,5 +1,6 @@
 package ua.edu.sumdu.tss.mudbms.core;
 
+import ua.edu.sumdu.tss.mudbms.core.engine.Storage;
 import ua.edu.sumdu.tss.mudbms.utils.ArrayUtils;
 import ua.edu.sumdu.tss.mudbms.utils.StringUtils;
 
@@ -27,6 +28,10 @@ public class Record implements Serializable {
         this.isValid = isValid;
         this.key = key;
         this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public static Record fromBytes(byte[] bytes) {

@@ -1,10 +1,11 @@
-package ua.edu.sumdu.tss.mudbms.core;
+package ua.edu.sumdu.tss.mudbms;
 
 import io.javalin.http.Context;
 import org.apache.commons.lang3.NotImplementedException;
+import ua.edu.sumdu.tss.mudbms.core.Transaction;
+import ua.edu.sumdu.tss.mudbms.core.engine.Engine;
 
 import java.util.Date;
-import java.util.Optional;
 
 public class Api {
 
@@ -12,7 +13,6 @@ public class Api {
         context.sessionAttribute("Valid until", new Date());
         context.result("Session started");
     }
-
 
     public static void rollback(Context context) {
         throw new NotImplementedException();
@@ -26,7 +26,7 @@ public class Api {
         var transaction = Api.getTransaction(context);
         System.out.println("READ");
         var key = context.pathParam("key");
-        var value = Optional.ofNullable(Wal.read(key)).orElse(CachedStorage.read(key));
+        var value = Engine.getInstance().read(key);
         context.result((value == null) ? "NULL" : value);
     }
 
@@ -53,7 +53,7 @@ public class Api {
         var key = context.pathParam("key");
         var trx = getTransaction(context);
         var value = context.formParam("value");
-        Wal.write(trx.getId(), key, value);
+        Engine.getInstance().write(key, value);
         context.status(204);
     }
 

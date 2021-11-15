@@ -2,7 +2,7 @@ package ua.edu.sumdu.tss.mudbms.utils;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ua.edu.sumdu.tss.mudbms.core.Storage;
+import ua.edu.sumdu.tss.mudbms.core.engine.Storage;
 import ua.edu.sumdu.tss.mudbms.test_utils.Utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

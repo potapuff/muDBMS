@@ -1,4 +1,6 @@
-package ua.edu.sumdu.tss.mudbms.core;
+package ua.edu.sumdu.tss.mudbms.core.engine;
+
+import ua.edu.sumdu.tss.mudbms.core.Record;
 
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
@@ -10,10 +12,16 @@ public class Storage {
     public static final int INT_SIZE = 4;
     public static final int BOOL_SIZE = 1;
 
+    private final String dataFile;
+
+    public Storage(String dataFile) {
+        this.dataFile = dataFile;
+    }
+
     @lombok.SneakyThrows
-    public static String read(String key) {
+    public String read(String key) {
         try (var file = takeStorage()) {
-            if (!Storage.scroll(file, key.getBytes())) {
+            if (!scroll(file, key.getBytes())) {
                 //Record not found
                 return null;
             }
@@ -21,15 +29,15 @@ public class Storage {
             byte[] rawRecord = new byte[recordLength];
             file.read(rawRecord);
             Record rec = Record.fromBytes(rawRecord);
-            return rec.value;
+            return rec.getValue();
         }
     }
 
     @lombok.SneakyThrows
-    public static void write(String key, String value) {
+    public void write(String key, String value) {
         try (var file = takeStorage()) {
             byte[] rawRecord = new Record(key, value).getBytes();
-            if (Storage.scroll(file, key.getBytes())) {
+            if (scroll(file, key.getBytes())) {
                 int recordLength = file.readInt();
                 if (recordLength >= rawRecord.length) {
                     //In-place editing
@@ -51,7 +59,7 @@ public class Storage {
     }
 
     @lombok.SneakyThrows
-    public static boolean scroll(RandomAccessFile file, byte[] key) {
+    public boolean scroll(RandomAccessFile file, byte[] key) {
         long startPosition;
         int recordLength;
         int keyLength;
@@ -78,7 +86,7 @@ public class Storage {
     }
 
     @lombok.SneakyThrows
-    private static RandomAccessFile takeStorage() {
+    private RandomAccessFile takeStorage() {
         Path fileName = getStoragePath();
         RandomAccessFile file;
         try {
@@ -90,7 +98,7 @@ public class Storage {
         return file;
     }
 
-    public static Path getStoragePath() {
-        return Path.of("test.data");
+    public Path getStoragePath() {
+        return Path.of(dataFile);
     }
 }

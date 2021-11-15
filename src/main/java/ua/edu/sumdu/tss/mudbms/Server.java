@@ -8,16 +8,17 @@ import io.javalin.plugin.openapi.OpenApiPlugin;
 import io.javalin.plugin.openapi.ui.ReDocOptions;
 import io.javalin.plugin.openapi.ui.SwaggerOptions;
 import io.swagger.v3.oas.models.info.Info;
-import ua.edu.sumdu.tss.mudbms.core.Api;
+import ua.edu.sumdu.tss.mudbms.core.engine.CachedStorage;
+import ua.edu.sumdu.tss.mudbms.core.engine.Engine;
 import ua.edu.sumdu.tss.mudbms.utils.Keys;
 
 public class Server {
 
-    final static String LOGO = """
+    private final static String LOGO = """
               
-              ____
-            < DBMS >
-              ----
+              _____
+            < μDBMS >
+              -----
                      \\   ^__^
                       \\  (oo)\\_______
                          (__)\\       )\\/\\
@@ -25,7 +26,6 @@ public class Server {
                              ||     ||
 
             """;
-
 
     private final Javalin app = Javalin.create(
                     config -> {
@@ -52,6 +52,7 @@ public class Server {
 
     public void start(final int port) {
         JavalinLogger.info(LOGO);
+        Engine.setup(new CachedStorage("data.file"));
         this.app.start(port);
     }
 
@@ -67,7 +68,7 @@ public class Server {
                 .path("/swagger-docs")
                 .swagger(new SwaggerOptions("/swagger").title("My Swagger Documentation"))
                 .reDoc(new ReDocOptions("/redoc").title("My ReDoc Documentation"))
-                .activateAnnotationScanningFor("edu.sumdu.tss.elephant.controller.api");
+                .activateAnnotationScanningFor("edu.sumdu.tss.mudbms.api");
 
     }
 }
