@@ -1,10 +1,10 @@
-package ua.edu.sumdu.tss.mudbms.core.engine;
+package ua.edu.sumdu.tss.mudbms.core.storage_engine;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class CachedStorage extends Storage {
+public class CachedStorage extends ImmediateDiskStorage implements StorageEngine {
 
     private final Map<String, String> cache;
 

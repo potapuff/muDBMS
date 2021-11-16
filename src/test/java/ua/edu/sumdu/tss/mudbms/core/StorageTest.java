@@ -3,8 +3,7 @@ package ua.edu.sumdu.tss.mudbms.core;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.edu.sumdu.tss.mudbms.core.engine.Engine;
-import ua.edu.sumdu.tss.mudbms.core.engine.Storage;
+import ua.edu.sumdu.tss.mudbms.core.storage_engine.ImmediateDiskStorage;
 import ua.edu.sumdu.tss.mudbms.test_utils.Utils;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StorageTest {
 
-    private Storage storage;
+    private ImmediateDiskStorage storage;
 
     @BeforeEach
     void storageClean() {
-        storage = Engine.getInstance();
+        storage = new ImmediateDiskStorage("test.data");
         storage.getStoragePath().toFile().delete();
     }
 

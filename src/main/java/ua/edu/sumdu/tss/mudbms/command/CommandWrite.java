@@ -1,4 +1,4 @@
-package ua.edu.sumdu.tss.mudbms;
+package ua.edu.sumdu.tss.mudbms.command;
 
 public class CommandWrite extends Command {
     public final String key;

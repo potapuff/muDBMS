@@ -1,4 +1,4 @@
-package ua.edu.sumdu.tss.mudbms.core.engine;
+package ua.edu.sumdu.tss.mudbms.core.storage_engine;
 
 import ua.edu.sumdu.tss.mudbms.core.Record;
 
@@ -7,14 +7,14 @@ import java.io.RandomAccessFile;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-public class Storage {
+public class ImmediateDiskStorage implements StorageEngine {
 
     public static final int INT_SIZE = 4;
     public static final int BOOL_SIZE = 1;
 
     private final String dataFile;
 
-    public Storage(String dataFile) {
+    public ImmediateDiskStorage(String dataFile) {
         this.dataFile = dataFile;
     }
 

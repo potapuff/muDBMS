@@ -1,6 +1,6 @@
 package ua.edu.sumdu.tss.mudbms.core;
 
-import ua.edu.sumdu.tss.mudbms.core.engine.Storage;
+import ua.edu.sumdu.tss.mudbms.core.storage_engine.ImmediateDiskStorage;
 import ua.edu.sumdu.tss.mudbms.utils.ArrayUtils;
 import ua.edu.sumdu.tss.mudbms.utils.StringUtils;
 
@@ -36,8 +36,8 @@ public class Record implements Serializable {
 
     public static Record fromBytes(byte[] bytes) {
         boolean isValid = ArrayUtils.readBoolean(bytes, 0);
-        int keyLength = ArrayUtils.readInt(bytes, Storage.BOOL_SIZE);
-        int dataOffset = Storage.BOOL_SIZE + Storage.INT_SIZE;
+        int keyLength = ArrayUtils.readInt(bytes, ImmediateDiskStorage.BOOL_SIZE);
+        int dataOffset = ImmediateDiskStorage.BOOL_SIZE + ImmediateDiskStorage.INT_SIZE;
         byte[] keyArray = new byte[keyLength];
         System.arraycopy(bytes, dataOffset, keyArray, 0, keyArray.length);
         int unusedTail = 0;
@@ -58,10 +58,10 @@ public class Record implements Serializable {
     }
 
     public byte[] getBytes() {
-        int dataOffset = Storage.INT_SIZE + Storage.BOOL_SIZE;
-        byte[] output = new byte[key.length() + value.length() + Storage.INT_SIZE + Storage.BOOL_SIZE];
+        int dataOffset = ImmediateDiskStorage.INT_SIZE + ImmediateDiskStorage.BOOL_SIZE;
+        byte[] output = new byte[key.length() + value.length() + ImmediateDiskStorage.INT_SIZE + ImmediateDiskStorage.BOOL_SIZE];
         ArrayUtils.writeBoolean(output, 0, isValid);
-        ArrayUtils.writeInt(output, Storage.BOOL_SIZE, key.length());
+        ArrayUtils.writeInt(output, ImmediateDiskStorage.BOOL_SIZE, key.length());
         System.arraycopy(key.getBytes(), 0, output, dataOffset, key.length());
         System.arraycopy(value.getBytes(), 0, output, key.length() + dataOffset, value.length());
         return output;

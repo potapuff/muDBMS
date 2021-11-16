@@ -1,7 +1,7 @@
 package ua.edu.sumdu.tss.mudbms.core;
 
-import ua.edu.sumdu.tss.mudbms.Command;
-import ua.edu.sumdu.tss.mudbms.CommandWrite;
+import ua.edu.sumdu.tss.mudbms.command.Command;
+import ua.edu.sumdu.tss.mudbms.command.CommandWrite;
 
 import java.util.ArrayList;
 import java.util.Collections;

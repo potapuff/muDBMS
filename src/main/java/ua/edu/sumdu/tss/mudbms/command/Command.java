@@ -1,4 +1,4 @@
-package ua.edu.sumdu.tss.mudbms;
+package ua.edu.sumdu.tss.mudbms.command;
 
 abstract public class Command {
     public final int transaction_id;

@@ -21,7 +21,6 @@ class Common {
         app = new Server();
         app.start(Keys.APP_PORT);
 
-
         Unirest.config().enableCookieManagement(false).cacheResponses(false).concurrency(1, 1).defaultBaseUrl(Keys.URL + "/");
     }
 

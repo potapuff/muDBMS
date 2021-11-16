@@ -8,8 +8,9 @@ import io.javalin.plugin.openapi.OpenApiPlugin;
 import io.javalin.plugin.openapi.ui.ReDocOptions;
 import io.javalin.plugin.openapi.ui.SwaggerOptions;
 import io.swagger.v3.oas.models.info.Info;
-import ua.edu.sumdu.tss.mudbms.core.engine.CachedStorage;
-import ua.edu.sumdu.tss.mudbms.core.engine.Engine;
+import ua.edu.sumdu.tss.mudbms.core.storage_engine.CachedStorage;
+import ua.edu.sumdu.tss.mudbms.core.transaction_engine.NoTransactionEngine;
+import ua.edu.sumdu.tss.mudbms.core.transaction_engine.TransactionCoordinator;
 import ua.edu.sumdu.tss.mudbms.utils.Keys;
 
 public class Server {
@@ -52,7 +53,7 @@ public class Server {
 
     public void start(final int port) {
         JavalinLogger.info(LOGO);
-        Engine.setup(new CachedStorage("data.file"));
+        TransactionCoordinator.setup(new NoTransactionEngine(new CachedStorage("data.file")));
         this.app.start(port);
     }
 
