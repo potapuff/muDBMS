@@ -1,5 +1,6 @@
 package ua.edu.sumdu.tss.mudbms.core.transaction_engine;
 
+import ua.edu.sumdu.tss.mudbms.core.Transaction;
 import ua.edu.sumdu.tss.mudbms.core.storage_engine.StorageEngine;
 
 public abstract class TransactionEngine {
@@ -10,11 +11,11 @@ public abstract class TransactionEngine {
         this.storage = storage;
     }
 
-    public abstract String read(String key);
+    public abstract String read(Transaction transaction, String key);
 
-    public abstract void write(String key, String value);
+    public abstract void write(Transaction transaction, String key, String value);
 
-    public abstract boolean commit();
+    public abstract boolean commit(Transaction transaction);
 
-    public abstract boolean rollback();
+    public abstract boolean rollback(Transaction transaction);
 }

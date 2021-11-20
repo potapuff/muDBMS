@@ -9,8 +9,8 @@ import io.javalin.plugin.openapi.ui.ReDocOptions;
 import io.javalin.plugin.openapi.ui.SwaggerOptions;
 import io.swagger.v3.oas.models.info.Info;
 import ua.edu.sumdu.tss.mudbms.core.storage_engine.CachedStorage;
-import ua.edu.sumdu.tss.mudbms.core.transaction_engine.NoTransactionEngine;
-import ua.edu.sumdu.tss.mudbms.core.transaction_engine.TransactionCoordinator;
+import ua.edu.sumdu.tss.mudbms.core.transaction_engine.TransactionFactory;
+import ua.edu.sumdu.tss.mudbms.core.transaction_engine.WalDifferableEngine;
 import ua.edu.sumdu.tss.mudbms.utils.Keys;
 
 public class Server {
@@ -53,7 +53,7 @@ public class Server {
 
     public void start(final int port) {
         JavalinLogger.info(LOGO);
-        TransactionCoordinator.setup(new NoTransactionEngine(new CachedStorage("data.file")));
+        TransactionFactory.setup(new WalDifferableEngine(new CachedStorage("data.file")));
         this.app.start(port);
     }
 

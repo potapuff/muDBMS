@@ -7,7 +7,7 @@ import java.io.RandomAccessFile;
 import java.nio.file.Path;
 import java.util.Arrays;
 
-public class ImmediateDiskStorage implements StorageEngine {
+public class ImmediateDiskStorage implements StorageEngine, DirectAccessStorage {
 
     public static final int INT_SIZE = 4;
     public static final int BOOL_SIZE = 1;
@@ -59,6 +59,33 @@ public class ImmediateDiskStorage implements StorageEngine {
     }
 
     @lombok.SneakyThrows
+    public int writeRecord(Record rec) {
+        try (var file = takeStorage()) {
+            byte[] rawRecord = rec.getBytes();
+            if (scroll(file, rec.getKey().getBytes())) {
+                int recordLength = file.readInt();
+                if (recordLength >= rawRecord.length) {
+                    //In-place editing
+                    file.write(rawRecord);
+                    for (int i = 0; i < recordLength - rawRecord.length; i++) {
+                        //fill not-used part with 0
+                        file.write(0);
+                    }
+                    return (int) file.getFilePointer();
+                } else {
+                    //Mark Record as deleted
+                    file.writeBoolean(false);
+                    file.seek(file.length());
+                }
+            }
+            file.writeInt(rawRecord.length);
+            file.write(rawRecord);
+            return (int) file.getFilePointer();
+        }
+    }
+
+
+    @lombok.SneakyThrows
     public boolean scroll(RandomAccessFile file, byte[] key) {
         long startPosition;
         int recordLength;
@@ -100,5 +127,23 @@ public class ImmediateDiskStorage implements StorageEngine {
 
     public Path getStoragePath() {
         return Path.of(dataFile);
+    }
+
+    @Override
+    @lombok.SneakyThrows
+    public Record byAddress(long address) {
+        try (var file = takeStorage()) {
+            file.seek(address);
+            int recordLength = file.readInt();
+            byte[] rawRecord = new byte[recordLength];
+            file.read(rawRecord);
+            Record rec = Record.fromBytes(rawRecord);
+            return rec;
+        }
+    }
+
+    @Override
+    public long getAddress(String key) {
+        return 0;
     }
 }

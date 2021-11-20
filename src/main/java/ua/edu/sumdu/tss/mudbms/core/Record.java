@@ -34,6 +34,10 @@ public class Record implements Serializable {
         return value;
     }
 
+    public String getKey() {
+        return key;
+    }
+
     public static Record fromBytes(byte[] bytes) {
         boolean isValid = ArrayUtils.readBoolean(bytes, 0);
         int keyLength = ArrayUtils.readInt(bytes, ImmediateDiskStorage.BOOL_SIZE);

@@ -1,30 +1,35 @@
 package ua.edu.sumdu.tss.mudbms.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import ua.edu.sumdu.tss.mudbms.core.transaction_engine.TransactionEngine;
 
 public class Transaction {
-    static private final List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-    static int counter = 0;
+
     private final int id;
+    TransactionEngine engine;
 
-    private Transaction(int id) {
-        this.id = id;
-    }
-
-    static public Transaction create() {
-        var t = new Transaction(counter++);
-        transactions.add(t);
-        return t;
-    }
-
-    public static Transaction get(int id) {
-        return transactions.get(id);
+    public Transaction(TransactionEngine engine, int trx_id) {
+        this.engine = engine;
+        this.id = trx_id;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String read(String key) {
+        return engine.read(this, key);
+    }
+
+    public void write(String key, String value) {
+        engine.write(this, key, value);
+    }
+
+    public boolean commit() {
+        return engine.commit(this);
+    }
+
+    public boolean rollback() {
+        return engine.rollback(this);
     }
 
 }
